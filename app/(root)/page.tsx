@@ -1,5 +1,7 @@
-import IdeaCard from "@/components/IdeaCard";
+import IdeaCard, { IdeaCardType } from "@/components/IdeaCard";
 import SearchForm from "@/components/SearchForm";
+import { sanityFetch, SanityLive } from "@/sanity/lib/live";
+import { IDEAS_QUERY } from "@/sanity/lib/queries";
 
 export default async function Home({
   searchParams,
@@ -7,19 +9,9 @@ export default async function Home({
   readonly searchParams: Promise<{ query?: string }>;
 }) {
   const { query } = await searchParams;
+  const params = { search: query || null};
 
-  const posts = [
-    {
-      _createdAt: new Date(),
-      views: 10,
-      author: { _id: 1, name: "Luis" },
-      _id: 1,
-      description: "This is a description.",
-      image: "https://picsum.photos/200/300",
-      category: "Tech",
-      title: "Meme Central",
-    },
-  ];
+  const {data: posts} = await sanityFetch({query: IDEAS_QUERY, params});
 
   return (
     <>
@@ -53,6 +45,8 @@ export default async function Home({
           )}
         </ul>
       </section>
+
+      <SanityLive/>
     </>
   );
 }
