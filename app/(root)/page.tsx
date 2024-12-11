@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import IdeaCard, { IdeaCardType } from "@/components/IdeaCard";
 import SearchForm from "@/components/SearchForm";
 import { sanityFetch, SanityLive } from "@/sanity/lib/live";
@@ -10,6 +11,10 @@ export default async function Home({
 }) {
   const { query } = await searchParams;
   const params = { search: query || null};
+
+  const session = await auth();
+
+  console.log(session?.id);
 
   const {data: posts} = await sanityFetch({query: IDEAS_QUERY, params});
 

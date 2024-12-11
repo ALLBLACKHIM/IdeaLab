@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/lib/utils";
 import { client } from "@/sanity/lib/client";
 import { IDEAS_BY_ID_QUERY } from "@/sanity/lib/queries";
@@ -6,6 +7,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { remark } from "remark";
 import html from "remark-html";
+import { Suspense } from "react";
+import View from "@/components/View";
 
 const experimental_ppr = true;
 
@@ -40,6 +43,8 @@ const page = async ({
           src={post.image}
           alt="thumbnail"
           className="w-full h-auto rounded-xl"
+          width={68}
+          height={68}
         />
 
         <div className="space-y-5 mt-10 max-w-4xl mx-auto">
@@ -81,9 +86,13 @@ const page = async ({
         <hr className="divider"/>
 
         {/* later: Editor selected ideas */}
+
+        <Suspense fallback={<Skeleton className="view_skeleton"/>}>
+        <View id={id}/>
+        </Suspense>
       </section>
 
-      
+
     </>
   );
 };

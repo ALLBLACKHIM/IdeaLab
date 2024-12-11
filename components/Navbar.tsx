@@ -20,7 +20,7 @@ const Navbar = async () => {
         <div className="flex item-center gap-5 text-white">
           {session && session?.user ? (
             <>
-              <Link href="/startup/create" className="text-2xl">
+              <Link href="/idea/create" className="text-2xl">
                 <span>Create</span>
               </Link>
 
