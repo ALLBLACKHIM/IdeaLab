@@ -1,4 +1,5 @@
 import { auth } from "@/auth"
+import IdeaForm from "@/components/IdeaForm";
 import { redirect } from "next/navigation";
 
 const page = async () => {
@@ -12,6 +13,7 @@ const page = async () => {
     <section className="sky_container !min-h-[230px]">
         <h1 className="heading">Contribute Your Idea</h1>
     </section>
+    <IdeaForm />
     </>
   )
 }
