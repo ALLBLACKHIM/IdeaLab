@@ -8,10 +8,15 @@ import { Button } from "./ui/button";
 import { Send } from "lucide-react";
 import { formSchema } from "@/lib/validation";
 import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const IdeaForm = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [article, setArticle] = useState("");
+  const { toast } = useToast();
+  const router = useRouter();
+
   const handleFormSubmit = async (prevState: any, formData: FormData) => {
     try {
       const formValues = {
@@ -20,25 +25,51 @@ const IdeaForm = () => {
         category: formData.get("category") as string,
         link: formData.get("link") as string,
         article,
-      }
+      };
 
       await formSchema.parseAsync(formValues);
       console.log(formValues);
 
       // const result = await createIdea(prevState, formData, article);
+
       // console.log(result);
+      
+      // if(result.status === "SUCCESS"){
+      //   toast({
+      //     title: "Error",
+      //     description: "Your Idea Article has been created successfully",
+      //   });
+
+      //   router.push(`/idea/${result.id}`);
+      // }
+
+      // return result;
     } catch (error) {
-      if(error instanceof z.ZodError){
-        const fieldErrors = error.flatten().fieldErrors;
+      if (error instanceof z.ZodError) {
+        const { fieldErrors } = error.flatten();
+
         setErrors(fieldErrors as unknown as Record<string, string>);
 
-        return ({...prevState, error: "Validation failed", status: "ERROR"});
+        toast({
+          title: "Error",
+          description: "Please check the form fields for errors",
+          variant: "destructive",
+        });
+
+        return { ...prevState, error: "Validation failed", status: "ERROR" };
       }
+
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+
       return {
         ...prevState,
-        error: "An error occurred while submitting the form",
+        error: "An unexpected error occurred while submitting the form",
         status: "ERROR",
-      }
+      };
     }
   };
 
